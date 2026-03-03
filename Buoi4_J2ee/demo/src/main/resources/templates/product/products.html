@@ -1,0 +1,44 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>List products</title>
+</head>
+<body>
+<div th:fragment="content" class="container body-content">
+    <a th:href="@{/products/create}" class="btn btn-primary">Create New Product</a>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Image</th>
+            <th scope="col">Category Name</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${listproduct}">
+            <td scope="row" th:text="${product.id}"></td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.price}"></td>
+            <td>
+                <img height="120" width="150"
+                     th:if="${product.image} != null and ${product.image} != ''"
+                     th:src="@{/images/{name}(name=${product.image})}"
+                     alt="Product Image">
+                <span th:if="${product.image} == null or ${product.image} == ''">No image</span>
+            </td>
+            <td th:text="${product.category?.name}"></td>
+            <td>
+                <a th:href="@{/products/edit/{id}(id=${product.id})}"
+                   class="btn btn-secondary">Edit</a>
+                <a th:href="@{/products/delete/{id}(id=${product.id})}"
+                   class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
