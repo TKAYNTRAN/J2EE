@@ -1,16 +1,16 @@
-package controller;
+package com.example.demo.controller;
 
 import org.springframework.ui.Model;
-import jakarta.validation.Valid;
-import model.Category;
-import model.Product;
+import javax.validation.Valid;
+import com.example.demo.model.Category;
+import com.example.demo.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import service.CategoryService;
-import service.ProductService;
+import com.example.demo.service.CategoryService;
+import com.example.demo.service.ProductService;
 
 @Controller
 @RequestMapping("/products")
@@ -37,8 +37,8 @@ public class ProductController {
 
     @PostMapping("/create")
     public String Create(@Valid Product newProduct, BindingResult result,
-                         @RequestParam(value = "category.id", required = false) Integer categoryId,
-                         @RequestParam("imageProduct") MultipartFile imageProduct,
+                         @RequestParam(value = "category.id", required = false) String categoryId,
+                         @RequestParam(value = "imageProduct", required = false) MultipartFile imageProduct,
                          Model model) {
 
         if (result.hasErrors()) {
@@ -47,8 +47,10 @@ public class ProductController {
             return "product/create";
         }
 
-        productService.updateImage(newProduct, imageProduct); // Xử lý ảnh
-        if (categoryId != null) {
+        if (imageProduct != null && !imageProduct.isEmpty()) {
+            productService.updateImage(newProduct, imageProduct); // Xử lý ảnh
+        }
+        if (categoryId != null && !categoryId.isEmpty()) {
             Category selectedCategory = categoryService.get(categoryId);
             newProduct.setCategory(selectedCategory);
         }
@@ -57,7 +59,7 @@ public class ProductController {
     }
 
     @GetMapping("/edit/{id}")
-    public String Edit(@PathVariable int id, Model model) {
+    public String Edit(@PathVariable String id, Model model) {
         Product find = productService.get(id);
         if (find == null) {
             return "error/404"; // Trang lỗi tùy chỉnh
@@ -70,7 +72,8 @@ public class ProductController {
     @PostMapping("/edit")
     public String Edit(@Valid Product editProduct,
                        BindingResult result,
-                       @RequestParam("imageProduct") MultipartFile imageProduct,
+                       @RequestParam(value = "imageProduct", required = false) MultipartFile imageProduct,
+                       @RequestParam(value = "category.id", required = false) String categoryId,
                        Model model) {
 
         if (result.hasErrors()) {
@@ -83,7 +86,18 @@ public class ProductController {
             productService.updateImage(editProduct, imageProduct); // Cập nhật ảnh nếu có
         }
 
+        if (categoryId != null && !categoryId.isEmpty()) {
+            Category selectedCategory = categoryService.get(categoryId);
+            editProduct.setCategory(selectedCategory);
+        }
+
         productService.update(editProduct); // Cập nhật sản phẩm
+        return "redirect:/products";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable String id) {
+        productService.delete(id);
         return "redirect:/products";
     }
 }
