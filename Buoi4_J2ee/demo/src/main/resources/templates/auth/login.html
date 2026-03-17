@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 520px; margin: 40px auto; padding: 0 16px; }
+        .card { border: 1px solid #ddd; border-radius: 10px; padding: 18px; }
+        label { display: block; margin-top: 12px; }
+        input, select { width: 100%; padding: 10px; margin-top: 6px; }
+        button { width: 100%; padding: 10px; margin-top: 16px; }
+        .msg { margin-top: 12px; color: #b00020; }
+        .ok { margin-top: 12px; color: #006400; }
+        .row { display: flex; justify-content: space-between; margin-top: 12px; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Đăng nhập</h2>
+
+    <div class="msg" th:if="${param.error}">Sai username hoặc password</div>
+    <div class="ok" th:if="${param.registered}">Đăng ký thành công. Bạn có thể đăng nhập.</div>
+    <div class="ok" th:if="${param.logout}">Đã đăng xuất.</div>
+
+    <form th:action="@{/login}" method="post">
+        <label>Username</label>
+        <input name="username" autocomplete="username" />
+
+        <label>Password</label>
+        <input name="password" type="password" autocomplete="current-password" />
+
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="row">
+        <a th:href="@{/register}">Đăng ký</a>
+        <a th:href="@{/products}">Về /products</a>
+    </div>
+</div>
+</body>
+</html>
+

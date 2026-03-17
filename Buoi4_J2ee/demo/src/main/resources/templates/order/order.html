@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; }
+        .card { border: 1px solid #ddd; border-radius: 10px; padding: 18px; }
+        a { margin-right: 12px; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>/order</h2>
+    <p>Chỉ USER mới truy cập được endpoint này.</p>
+    <p>Đang đăng nhập với username: <b th:text="${username}"></b></p>
+    <div>
+        <a th:href="@{/products}">/products</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+</body>
+</html>
+

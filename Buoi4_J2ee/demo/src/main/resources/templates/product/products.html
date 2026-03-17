@@ -5,7 +5,7 @@
 </head>
 <body>
 <div th:fragment="content" class="container body-content">
-    <a th:href="@{/products/create}" class="btn btn-primary">Create New Product</a>
+    <a th:href="@{/products/add}" class="btn btn-primary">Create New Product</a>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -31,9 +31,9 @@
             </td>
             <td th:text="${product.category?.name}"></td>
             <td>
-                <a th:href="@{/products/edit/{id}(id=${product.id})}"
+                <a th:href="@{/products/edit(id=${product.id})}"
                    class="btn btn-secondary">Edit</a>
-                <a th:href="@{/products/delete/{id}(id=${product.id})}"
+                <a th:href="@{/products/delete(id=${product.id})}"
                    class="btn btn-danger">Delete</a>
             </td>
         </tr>

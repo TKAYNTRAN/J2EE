@@ -28,18 +28,26 @@ public class ProductController {
         return "product/products";
     }
 
+    // Keep legacy route but redirect to the required endpoint.
     @GetMapping("/create")
-    public String Create(Model model) {
+    public String Create() {
+        return "redirect:/products/add";
+    }
+
+    // Per assignment: GET /products/add shows create form
+    @GetMapping("/add")
+    public String Add(Model model) {
         model.addAttribute("product", new Product());
         model.addAttribute("categories", categoryService.getAll());
         return "product/create";
     }
 
-    @PostMapping("/create")
-    public String Create(@Valid Product newProduct, BindingResult result,
-                         @RequestParam(value = "category.id", required = false) String categoryId,
-                         @RequestParam(value = "imageProduct", required = false) MultipartFile imageProduct,
-                         Model model) {
+    // Per assignment: POST /products/add creates product
+    @PostMapping("/add")
+    public String Add(@Valid Product newProduct, BindingResult result,
+                      @RequestParam(value = "category.id", required = false) String categoryId,
+                      @RequestParam(value = "imageProduct", required = false) MultipartFile imageProduct,
+                      Model model) {
 
         if (result.hasErrors()) {
             model.addAttribute("product", newProduct);
@@ -58,8 +66,9 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    @GetMapping("/edit/{id}")
-    public String Edit(@PathVariable String id, Model model) {
+    // Per assignment: GET /products/edit?id=...
+    @GetMapping("/edit")
+    public String Edit(@RequestParam("id") String id, Model model) {
         Product find = productService.get(id);
         if (find == null) {
             return "error/404"; // Trang lỗi tùy chỉnh
@@ -95,8 +104,9 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable String id) {
+    // Per assignment: GET /products/delete?id=...
+    @GetMapping("/delete")
+    public String delete(@RequestParam("id") String id) {
         productService.delete(id);
         return "redirect:/products";
     }

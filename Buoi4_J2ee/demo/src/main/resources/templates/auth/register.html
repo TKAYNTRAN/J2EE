@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 520px; margin: 40px auto; padding: 0 16px; }
+        .card { border: 1px solid #ddd; border-radius: 10px; padding: 18px; }
+        label { display: block; margin-top: 12px; }
+        input, select { width: 100%; padding: 10px; margin-top: 6px; }
+        button { width: 100%; padding: 10px; margin-top: 16px; }
+        .msg { margin-top: 12px; color: #b00020; }
+        .row { display: flex; justify-content: space-between; margin-top: 12px; }
+        small { color: #444; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Đăng ký</h2>
+
+    <div class="msg" th:if="${error}" th:text="${error}"></div>
+
+    <form th:action="@{/register}" method="post" th:object="${form}">
+        <label>Username</label>
+        <input th:field="*{username}" autocomplete="username" />
+
+        <label>Password</label>
+        <input th:field="*{password}" type="password" autocomplete="new-password" />
+
+        <label>Role</label>
+        <select name="role">
+            <option th:each="r : ${roles}" th:value="${r.name()}" th:text="${r.name()}"></option>
+        </select>
+        <small>USER: xem/đặt hàng. ADMIN: thêm/sửa/xóa sản phẩm.</small>
+
+        <button type="submit">Tạo tài khoản</button>
+    </form>
+
+    <div class="row">
+        <a th:href="@{/login}">Đăng nhập</a>
+        <a th:href="@{/products}">Về /products</a>
+    </div>
+</div>
+</body>
+</html>
+
