@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết quả tìm kiếm - Clinic Appointment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">&#127973; Clinic Appointment</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link" href="/admin/doctors">Quản lý Bác sĩ</a></li>
+                <li class="nav-item" sec:authorize="hasRole('PATIENT')"><a class="nav-link" href="/appointments">Lịch khám của tôi</a></li>
+            </ul>
+            <form class="d-flex me-3" action="/search" method="get">
+                <input class="form-control me-2" type="search" name="keyword" th:value="${keyword}" placeholder="Tìm bác sĩ..." required>
+                <button class="btn btn-light" type="submit">Tìm</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h3>Kết quả tìm kiếm: "<span th:text="${keyword}"></span>"</h3>
+    <p class="text-muted">Tìm thấy <span th:text="${doctors.size()}">0</span> bác sĩ</p>
+
+    <div th:if="${doctors.isEmpty()}" class="alert alert-info">
+        Không tìm thấy bác sĩ nào phù hợp.
+    </div>
+
+    <div class="row">
+        <div th:each="doctor : ${doctors}" class="col-md-12 mb-3">
+            <div class="card shadow-sm">
+                <div class="row g-0">
+                    <div class="col-md-3">
+                        <img th:src="${doctor.image != null && !doctor.image.isEmpty()} ? ${doctor.image} : 'https://via.placeholder.com/250x250?text=Doctor'"
+                             class="img-fluid rounded-start" style="height:200px;object-fit:cover;width:100%" alt="Doctor">
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card-body">
+                            <h4 th:text="${doctor.name}">Name</h4>
+                            <p><span class="badge bg-primary">Chuyên khoa: <span th:text="${doctor.specialty}"></span></span></p>
+                            <p><span class="badge bg-success">Khoa: <span th:text="${doctor.department.name}"></span></span></p>
+                            <div sec:authorize="hasRole('PATIENT')">
+                                <a th:href="@{/enroll/book/{id}(id=${doctor.id})}" class="btn btn-warning btn-sm">&#128197; Đặt lịch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="/" class="btn btn-secondary mt-3">&larr; Quay lại trang chủ</a>
+</div>
+</body>
+</html>
